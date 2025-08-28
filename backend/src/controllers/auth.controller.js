@@ -1,4 +1,4 @@
-import User from "../models/user.js"
+import User from "../models/User.js"
 import jwt from "jsonwebtoken";
 export async function signup(req, res) {
     const { email, password, fullName } = req.body;
@@ -24,7 +24,7 @@ export async function signup(req, res) {
         const idx = Math.floor(Math.random()*100) + 1; // generate a number between 1-100
         const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`
 
-        const newUser = new User.create({
+        const newUser = await User.create({
             email,
             fullName,
             password,

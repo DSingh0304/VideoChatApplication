@@ -1,35 +1,36 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
     fullName: {
-        typeof: String,
+        type: String,
         required: true,
     },
     email: {
-        typeof: String,
+        type: String,
         required: true,
         unique: true,
     },
     password: {
-        typeof: String,
+        type: String,
         required: true,
         minLength: 6,
     },
     bio: {
-        typeof: String,
-        defalut: "",
+        type: String,
+        default: "",
     },
     profilePic: {
-        typeof: String,
-        defalut: "",
+        type: String,
+        default: "",
     },
     nativeLanguage: {
-        typeof: String,
-        defalut: "",
+        type: String,
+        default: "",
     },
     isOnBoarded: {
-        typeof: Boolean,
-        defalut: false,
+        type: Boolean,
+        default: false,
     },
     friends: [
         {
@@ -40,19 +41,19 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-const User = mongoose.model("User", userSchema);
 
 //  pre save hook - hashing of password
 
-userSchema.pre("save" , async function(next){
-    if(!this.isModified("password")) return next();
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
     try {
         const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password,salt);
+        this.password = await bcrypt.hash(this.password, salt);
         next();
-    } catch (error){
-          next(error);
+    } catch (error) {
+        next(error);
     }
 })
+const User = mongoose.model("User", userSchema);
 
 export default User;
