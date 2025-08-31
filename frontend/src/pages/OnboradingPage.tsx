@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -9,7 +10,6 @@ import { completeOnboarding } from "../lib/api";
 const OnboradingPage = () => {
   const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
-
   const [formState , setFormState] = useState({
     fullName: authUser?.fullName || "",
     bio: authUser?.bio || "",
@@ -19,16 +19,18 @@ const OnboradingPage = () => {
     profilePic: authUser?.profilePic || "",
   });
 
+  const navigate = useNavigate();
   const {mutate:onboardingMutation , isPending} = useMutation({
-         mutationFn: completeOnboarding,
-         onSuccess: () => {
-          toast.success("Profile onboarded successfully");
-          queryClient.invalidateQueries({ queryKey: ["authUser"] });
-         }
-  })
+    mutationFn: completeOnboarding,
+    onSuccess: async () => {
+     toast.success("Profile onboarded successfully");
+     await queryClient.refetchQueries({ queryKey: ["authUser"] });
+     navigate("/");
+    }
+  });
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     onboardingMutation(formState);
   }
@@ -37,7 +39,7 @@ const OnboradingPage = () => {
      const idx = Math.floor(Math.random()*100) + 1; // 1-100 included
      const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
      setFormState({...formState , profilePic: randomAvatar})
-   }  
+   }
 
   return <>  
   <div className="min-h-screen bg-base-100 flex items-center justify-center p-4">
