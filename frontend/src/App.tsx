@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
-import OnboradingPage from "./pages/OnboradingPage";
+import OnboardingPage from "./pages/OnboradingPage";
 import ChatPage from "./pages/ChatPage";
 import CallPage from "./pages/CallPage";
 import NotificationPage from "./pages/NotificationPage";
@@ -41,11 +41,11 @@ const App = () => {
           />
           <Route
             path="/signup"
-            element={authUser ? <SignUpPage /> : <Navigate to="/" />}
+            element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
           />
           <Route
             path="/login"
-            element={authUser ? <LoginPage /> : <Navigate to="/" />}
+            element={!authUser ? <LoginPage /> : <Navigate to="/" />}
           />
           <Route
             path="/notifications"
@@ -61,7 +61,7 @@ const App = () => {
           />
           <Route
             path="/onboarding"
-            element={authUser ? <OnboradingPage /> : <Navigate to="/login" />}
+            element={authUser ? <OnboardingPage /> : <Navigate to="/login" />}
           />
         </Routes>
 
