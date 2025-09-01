@@ -20,7 +20,7 @@ const App = () => {
 
   const { isLoading, authUser } = useAuthUser();
 
-  const {theme , setTheme} = useThemeStore();
+  const {theme } = useThemeStore();
 
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.user.isOnBoarded;
