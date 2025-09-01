@@ -23,14 +23,14 @@ export async function signup(req, res) {
         }
 
         const idx = Math.floor(Math.random() * 100) + 1; // generate a number between 1-100
-        const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`
+        const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
 
         const newUser = await User.create({
             email,
             fullName,
             password,
-            profilePic: randomAvatar,
-        })
+            profilePic: typeof randomAvatar === "string" ? randomAvatar : "",
+        });
 
         try {
             await createStreamUser({

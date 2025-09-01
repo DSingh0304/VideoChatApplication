@@ -15,8 +15,13 @@ export const logout = async () => {
 };
 
 export const getAuthUser = async () => {
-  const res = await axiosInstance.get("/auth/me");
-  return res.data;
+  try {
+    const res = await axiosInstance.get("/auth/me");
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching auth user:", error);
+    return null;
+  }
 };
 
 export const completeOnboarding = async (userData: unknown) => {
