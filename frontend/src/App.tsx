@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import PageLoader from "./components/PageLoader";
 import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/Layout";
+import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
   //tanstack query
@@ -18,18 +19,21 @@ const App = () => {
   //axios is for updating the data
 
   const { isLoading, authUser } = useAuthUser();
+
+  const {theme , setTheme} = useThemeStore();
+
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.user.isOnBoarded;
   console.log(authUser);
   console.log(isOnboarded);
 
-  
+  //using zustand for global context
 
   if (isLoading) return <PageLoader />;
 
   return (
     <>
-      <div className="h-screen" data-theme="night">
+      <div className="h-screen" data-theme={theme}>
         <Routes>
           <Route
             path="/"
