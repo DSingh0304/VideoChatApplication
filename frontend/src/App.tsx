@@ -17,13 +17,12 @@ const App = () => {
   //axios is for updating the data
 
   const { isLoading, authUser } = useAuthUser();
+  const isAuthenticated = Boolean(authUser);
+  const isOnboarded = authUser?.user.isOnBoarded;
+  console.log(authUser);
+  console.log(isOnboarded);
 
-  const isAuthenticated = Boolean(authUser?.user);
-  const isOnboarded = authUser?.user?.isOnboarded;
-
-  console.log('authUser:', authUser);
-  console.log('isAuthenticated:', isAuthenticated);
-  console.log('isOnboarded:', isOnboarded);
+  
 
   if (isLoading) return <PageLoader />;
 
