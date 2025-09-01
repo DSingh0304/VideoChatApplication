@@ -1,21 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
-import useAuthUser from "../hooks/useAuthUser"
+import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
 
 const Navbar = () => {
+  const { authUser } = useAuthUser();
+  const location = useLocation();
+  const isChatPage = location.pathname?.startsWith("/chat");
+  
 
-    const {authUser} = useAuthUser();
-    const location = useLocation();
-    const isChatPage = location.pathname?.startsWith("/chat");
-
-    
-    const { logoutMutation } = useLogout();
+  const { logoutMutation } = useLogout();
 
   return (
     <nav>
-         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-end w-full">
           {/* LOGO - ONLY IN THE CHAT PAGE */}
           {isChatPage && (
@@ -42,18 +41,25 @@ const Navbar = () => {
 
           <div className="avatar">
             <div className="w-9 rounded-full">
-              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
+              <img
+                src={authUser?.user.profilePic}
+                alt="User Avatar"
+                rel="noreferrer"
+              />
             </div>
           </div>
 
           {/* Logout button */}
-          <button className="btn btn-ghost btn-circle" onClick={() => logoutMutation()}>
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={() => logoutMutation()}
+          >
             <LogOutIcon className="h-6 w-6 text-base-content opacity-70" />
           </button>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

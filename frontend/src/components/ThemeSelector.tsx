@@ -2,9 +2,14 @@ import { PaletteIcon } from "lucide-react";
 import { THEMES } from "../constants";
 import { useThemeStore } from "../store/useThemeStore";
 
-const ThemeSelectore = () => {
+type ThemeStore = {
+  theme: string;
+  setTheme: (theme: string) => void;
+};
 
-  const { theme , setTheme } = useThemeStore();
+const ThemeSelector = () => {
+
+  const { theme, setTheme } = useThemeStore() as ThemeStore;
 
   return (
     <div className="dropdown dropdown-end">
@@ -52,4 +57,4 @@ const ThemeSelectore = () => {
   )
 }
 
-export default ThemeSelectore
+export default ThemeSelector
