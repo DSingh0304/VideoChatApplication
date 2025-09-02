@@ -22,8 +22,8 @@ const ChatPage = () => {
 
   const {id:targetUserId} = useParams();
   
-  const [chatClient , setChatClient] = useState(null);
-  const [channel , setChannel] = useState(null);
+  const [chatClient , setChatClient] = useState<any | null>(null);
+  const [channel , setChannel] = useState<any | null>(null);
   const [loading , setLoading] = useState(true);
 
   const { authUser } = useAuthUser();
@@ -36,21 +36,21 @@ const ChatPage = () => {
 
   useEffect(() => {
     const initChat = async () => {
-      if(!tokenData?.token || !authUser) return;
-    try {
+      if(!tokenData?.token || !authUser?.user) return;
+      try {
       console.log("Initialising stream chat client...");
       const client = StreamChat.getInstance(STREAM_API_KEY);
 
       await client.connectUser({
-        id: authUser._id,
-        name: authUser.fullName,
-        image:authUser.profilePic,
-      },tokenData.token)
+        id: authUser.user._id,
+        name: authUser.user.fullName,
+        image: authUser.user.profilePic,
+      }, tokenData.token)
 
-      const channelId = [authUser._id , targetUserId].sort().join("-"); //sorting the channel is very important
+      const channelId = [authUser.user._id, targetUserId || ""].sort().join("-"); //sorting the channel is very important
 
       const currChannel = client.channel("messaging", channelId , {
-        members: [authUser._id, targetUserId],
+        members: [authUser.user._id, targetUserId],
       });
 
       await currChannel.watch();
@@ -64,24 +64,37 @@ const ChatPage = () => {
     finally{
       setLoading(false);
     }
-  }
+    };
+
+    // call the initializer
+    initChat();
+
+    // cleanup on unmount or dependency change
+    return () => {
+      if (chatClient) {
+        // disconnect user when leaving chat
+        chatClient.disconnectUser().catch(() => {});
+        setChatClient(null);
+      }
+    };
   },[tokenData , authUser , targetUserId]);
 
   if(loading || !chatClient || !channel) return <ChatLoader />
 
   return (
-    <div className="h-[93vh">
+    <div className="h-[93vh]">
       <Chat client={chatClient}>
         <Channel channel={channel}>
           <div className="w-full relative">
-            
+            <CallButton handle={handleVideoCall}/>
             <Window>
               <ChannelHeader />
               <MessageList />
               <MessageInput focus />
             </Window>
-
+            
           </div>
+          <Thread />
         </Channel>
       </Chat>
     </div>
