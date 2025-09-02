@@ -43,9 +43,9 @@ const CallPage = () => {
         console.log("Initializing Stream video client...");
 
         const user = {
-          id: authUser._id,
-          name: authUser.fullName,
-          image: authUser.profilePic,
+          id: authUser.user._id,
+          name: authUser.user.fullName,
+          image: authUser.user.profilePic,
         };
 
         const videoClient = new StreamVideoClient({
@@ -100,7 +100,11 @@ const CallContent = () => {
 
   const navigate = useNavigate();
 
-  if (callingState === CallingState.LEFT) return navigate("/");
+  useEffect(() => {
+    if (callingState === CallingState.LEFT) {
+      navigate("/");
+    }
+  }, [callingState, navigate]);
 
   return (
     <StreamTheme>
