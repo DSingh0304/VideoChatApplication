@@ -9,6 +9,9 @@ import { capitialize } from "../lib/utils";
 
 // Simple placeholder for NoFriendsFound component
 
+type OutgoingReq = { recipient?: { _id?: string } };
+type RecommendedUser = { _id: string; profilePic?: string; fullName?: string; location?: string; nativeLanguage?: string; learningLanguage?: string; bio?: string };
+
 const HomePage = () => {
 
   const queryClient = useQueryClient();
@@ -34,11 +37,11 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-      const outgoingIds = new Set()
+      const outgoingIds = new Set<string>()
       if(outgoingFriendReqs && outgoingFriendReqs.length > 0){
-        outgoingFriendReqs.forEach((req) => {
+        outgoingFriendReqs.forEach((req: OutgoingReq) => {
           if (req.recipient && req.recipient._id) {
-            outgoingIds.add(req.recipient._id);
+            outgoingIds.add(req.recipient._id as string);
           }
         });
         setOutgoingRequestsIds(outgoingIds)
@@ -95,7 +98,7 @@ const HomePage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendedUsers.map((user) => {
+              {recommendedUsers.map((user: RecommendedUser) => {
                 const hasRequestBeenSent = outgoingRequestsIds.has(user._id);
 
                 return (
@@ -123,11 +126,11 @@ const HomePage = () => {
                       {/* Languages with flags */}
                       <div className="flex flex-wrap gap-1.5">
                         <span className="badge badge-secondary">
-                          {getLanguageFlag(user.nativeLanguage)}
+                          {getLanguageFlag(user.nativeLanguage || "")}
                           Native: {capitialize(user.nativeLanguage)}
                         </span>
                         <span className="badge badge-outline">
-                          {getLanguageFlag(user.learningLanguage)}
+                          {getLanguageFlag(user.learningLanguage || "")}
                           Learning: {capitialize(user.learningLanguage)}
                         </span>
                       </div>

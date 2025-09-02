@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { LANGUAGE_TO_FLAG } from "../constants";
 
-const FriendCard = ({ friend }) => {
+type Friend = {
+  _id: string;
+  profilePic?: string;
+  fullName?: string;
+  nativeLanguage?: string;
+  learningLanguage?: string;
+}
+
+const FriendCard = ({ friend }: { friend: Friend }) => {
   return (
     <div className="card bg-base-200 hover:shadow-md transition-shadow">
       <div className="card-body p-4">
@@ -15,11 +23,11 @@ const FriendCard = ({ friend }) => {
 
         <div className="flex flex-wrap gap-1.5 mb-3">
           <span className="badge badge-secondary text-xs">
-            {getLanguageFlag(friend.nativeLanguage)}
+            {getLanguageFlag(friend.nativeLanguage || "")}
             Native: {friend.nativeLanguage}
           </span>
           <span className="badge badge-outline text-xs">
-            {getLanguageFlag(friend.learningLanguage)}
+            {getLanguageFlag(friend.learningLanguage || "")}
             Learning: {friend.learningLanguage}
           </span>
         </div>
@@ -40,7 +48,7 @@ export function getLanguageFlag(language: string) {
   if (!language) return null;
 
   const langLower = language.toLowerCase();
-  const countryCode = LANGUAGE_TO_FLAG[langLower];
+  const countryCode = LANGUAGE_TO_FLAG[langLower as keyof typeof LANGUAGE_TO_FLAG];
 
   if (countryCode) {
     return (

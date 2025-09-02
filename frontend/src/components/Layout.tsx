@@ -1,7 +1,12 @@
 import Sidebar from "./Sidebar"
 import Navbar from "./Navbar"
 
-const Layout = ({children , showSidebar=false}) => {
+type LayoutProps = {
+  children: React.ReactNode;
+  showSidebar?: boolean;
+}
+
+const Layout = ({ children, showSidebar = false }: LayoutProps) => {
   return (
     <>
     <div className="min-h-screen">
