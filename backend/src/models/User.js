@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    learningLanguage:{
+        type: String,
+        default: "",
+    },
     isOnBoarded: {
         type: Boolean,
         default: false,

@@ -37,7 +37,9 @@ const HomePage = () => {
       const outgoingIds = new Set()
       if(outgoingFriendReqs && outgoingFriendReqs.length > 0){
         outgoingFriendReqs.forEach((req) => {
-          outgoingIds.add(req.recipient._id);
+          if (req.recipient && req.recipient._id) {
+            outgoingIds.add(req.recipient._id);
+          }
         });
         setOutgoingRequestsIds(outgoingIds)
       }
@@ -54,19 +56,19 @@ const HomePage = () => {
           </Link>
         </div>
 
-        {loadingFriends ? (
+        { loadingFriends ? (
           <div className="flex justify-center py-12">
             <span className="loading loading-spinner loading-lg" />
           </div>
-        ) : friends.length === 0 ? (
+        ) :  friends.length === 0 ? 
           <NoFriendsFound />
-        ) : (
+         : 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {friends.map((friend: { _id: any; }) => (
+            {friends.map((friend: { _id: string }) => (
               <FriendCard key={friend._id} friend={friend} />
             ))}
           </div>
-        )}
+        }
 
         <section>
           <div className="mb-6 sm:mb-8">
